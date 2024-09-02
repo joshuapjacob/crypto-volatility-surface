@@ -1,5 +1,6 @@
 """Binance Option Data"""
 
+import os
 from datetime import datetime, timezone
 
 import polars as pl
@@ -10,11 +11,9 @@ import streamlit as st
 def get(path: str) -> dict:
     """Send GET request to Binance Options API and return the JSON response."""
 
-    PROXY = "socks5://localhost:5000"
-
     resp = requests.get(
         f"https://eapi.binance.com/eapi/v1/{path}",
-        proxies=dict(http=PROXY, https=PROXY),
+        proxies=dict(https=os.getenv("BINANCE_PROXY", "")),
     )
     resp.raise_for_status()
     resp = resp.json()
