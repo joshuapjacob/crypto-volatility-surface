@@ -39,7 +39,7 @@ with cols[0]:
         underlying. It can be used to visualize the volatility smile/skew and
         term structure. We use cryptocurrency option data from Binance to
         construct volatility surfaces using two approaches: kernel smoothing and
-        a Stochastic Volatility Inspired (SVI) parametrization.
+        the Stochastic Volatility Inspired (SVI) parametrization.
         
         Cryptocurrency options listed on Binance are European-style. For each
         option, Binance uses the [Black-Scholes model](https://en.wikipedia.org/wiki/Black%E2%80%93Scholes_model)

@@ -46,7 +46,7 @@ def generate_figure(df: pl.DataFrame, surface_func: callable, *args) -> go.Figur
                 z=Z,
                 showscale=False,
                 coloraxis="coloraxis",
-                opacity=0.80,
+                opacity=0.9,
                 contours=dict(
                     z=dict(highlight=False),
                 ),
