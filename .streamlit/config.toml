@@ -1,2 +1,5 @@
 [theme]
 base = "dark"
+
+[server]
+baseUrlPath = "/crypto-volatility-surface"
