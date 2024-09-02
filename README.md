@@ -1,6 +1,6 @@
 # Crypto Volatility Surface
 
-A dashboard to visualize cryptocurrency implied volatility surfaces constructed with option data from Binance. Built with [Streamlit](https://streamlit.io/).
+A dashboard to visualize cryptocurrency implied volatility surfaces constructed with option data from Binance.
 
 ![Volatility Surface](./thumbnail.png)
 
