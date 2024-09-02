@@ -1,0 +1,14 @@
+[project]
+name = "crypto-volatility-surface"
+version = "0.1.0"
+description = "A dashboard to visualize cryptocurrency implied volatility surfaces constructed with option data from Binance."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=2.1.0",
+    "plotly>=5.24.0",
+    "polars",
+    "requests[socks]>=2.32.3",
+    "scipy>=1.14.1",
+    "streamlit",
+]
