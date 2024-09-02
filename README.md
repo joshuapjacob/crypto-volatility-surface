@@ -1,4 +1,4 @@
-# Crypto Volatility Surface
+# [Crypto Volatility Surface](https://joshuapjacob.com/crypto-volatility-surface)
 
 A dashboard to visualize cryptocurrency implied volatility surfaces constructed with option data from Binance.
 
