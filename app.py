@@ -1,9 +1,11 @@
+"""Streamlit App"""
+
 from datetime import datetime, timezone
 
 import streamlit as st
 
 from lib.data import load_data
-from lib.plot import generate_figure
+from lib.plot import generate_figures
 from lib.surface import kernel_smoothing, svi
 
 UNIVERSE = ["BTCUSDT", "ETHUSDT"]
@@ -161,8 +163,11 @@ with cols[1]:
     )
 
 with st.spinner("Constructing kernel smoothed surface..."):
-    fig = generate_figure(df, kernel_smoothing, h_x, h_y)
-st.plotly_chart(fig, use_container_width=True)
+    figs = generate_figures(df, kernel_smoothing, h_x, h_y)
+cols = st.columns(len(figs), gap="large")
+for col, fig in zip(cols, figs):
+    with col:
+        st.plotly_chart(fig, use_container_width=True)
 
 st.divider()  # ----------------------------------------------------------------
 
@@ -223,8 +228,11 @@ with cols[1]:
     )
 
 with st.spinner("Constructing SVI surface..."):
-    fig = generate_figure(df, svi)
-st.plotly_chart(fig, use_container_width=True)
+    figs = generate_figures(df, svi)
+cols = st.columns(len(figs), gap="large")
+for col, fig in zip(cols, figs):
+    with col:
+        st.plotly_chart(fig, use_container_width=True)
 
 st.divider()  # ----------------------------------------------------------------
 
