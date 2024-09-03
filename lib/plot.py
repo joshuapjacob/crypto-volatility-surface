@@ -82,7 +82,7 @@ def generate_figures(
                 xanchor="center",
                 yanchor="top",
             ),
-            height=700,
+            height=600,
             margin=dict(l=0, r=0, t=0, b=0),
             coloraxis=dict(
                 cmin=cmin,
