@@ -10,7 +10,7 @@ A dashboard to visualize cryptocurrency implied volatility surfaces constructed 
 uv run streamlit run app.py
 ```
 
-If you are in a restricted location and use a proxy to access Binance, set a `BINANCE_PROXY` environment variable.
+If you are in a restricted location (like the United States) and use a proxy to access Binance, set a `BINANCE_PROXY` environment variable.
 
 ```bash
 # For example:

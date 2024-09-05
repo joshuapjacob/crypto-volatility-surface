@@ -48,11 +48,11 @@ def generate_figures(
                 ),
                 name="Surface",
                 showlegend=True,
-                hovertemplate="""
-                    Log Moneyness: %{x:.2f}<br>
-                    Days To Expiry: %{y:d}<br>
-                    IV: %{z}<extra></extra>
-                """,
+                hovertemplate=(
+                    "Log Moneyness: %{x:.2f}<br>"
+                    "Days To Expiry: %{y:d}<br>"
+                    "IV: %{z}<extra></extra>"
+                ),
             ),
         )
 
