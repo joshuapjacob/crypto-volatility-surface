@@ -213,8 +213,8 @@ with cols[1]:
         \min_{\chi_{\tau}} \quad& \sum_{i=1}^n
         w_i \left(\hat{\sigma}_i - \sigma^{\text{mark}}_i \right)^2 \\
         \text{s.t.} \quad& b \geq 0 \\
-        &|\rho| < 1 \\
-        &s > 0
+        &|\rho| \leq 1 \\
+        &s \geq 0
         \end{align*}
         """
     )
