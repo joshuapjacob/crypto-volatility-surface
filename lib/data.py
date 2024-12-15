@@ -44,6 +44,7 @@ def load_data(now_ts: int, universe: list[str]) -> tuple[pl.DataFrame, datetime]
     MAX_IV = 5
     MIN_DAYS_TO_EXPIRY = 10
     MAX_DAYS_TO_EXPIRY = 180
+    MAX_LOG_MONEYNESS = 0.15
 
     # Get current exchange and symbol information.
     exchange_info = get("exchangeInfo")
@@ -98,12 +99,16 @@ def load_data(now_ts: int, universe: list[str]) -> tuple[pl.DataFrame, datetime]
     df = (
         symbol_df.join(underlying_df, on="underlying")
         .join(mark_df, on="symbol")
+        .sort(by=["underlying", "strikePrice", "daysToExpiry"])
         .with_columns(
-            logMoneyness=pl.when(pl.col("side") == "C")
-            .then(pl.col("indexPrice") / pl.col("strikePrice"))
-            .otherwise(pl.col("strikePrice") / pl.col("indexPrice"))
-            .log(),
+            logMoneyness=(pl.col("indexPrice") / pl.col("strikePrice")).log(),
             weight=1 / (1 + pl.col("askIV") - pl.col("bidIV")),
+        )
+        .filter(
+            # Ignore deep in-the-money options.
+            pl.when(pl.col("side") == "CALL")
+            .then((pl.col("logMoneyness") < MAX_LOG_MONEYNESS))
+            .otherwise((pl.col("logMoneyness") > -MAX_LOG_MONEYNESS))
         )
     )
 

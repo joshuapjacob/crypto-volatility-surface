@@ -49,21 +49,13 @@ with cols[0]:
         $\sigma^{\text{ask}}$, and $\sigma^{\text{mark}}$, calculated from the
         best bid, best ask, and midprice respectively. We use $\tau$ to denote
         the number of days to expiry. For an option with strike price $K$ and
-        underlying spot price $S$, we define log moneyness $k$ as
-        """
-    )
-    st.latex(
-        r"""
-        k = \begin{cases}
-            \log(S/K) \quad \text{if call} \\
-            \log (K/S) \quad \text{if put}
-        \end{cases}
+        underlying spot price $S$, we define log moneyness $k = \log(S/K)$.
         """
     )
     st.markdown(
         r"""
-        In both of our approaches, we also weight observed option data points
-        with the following scheme:
+        In both of our approaches, we also ignore deep in-the-money options and
+        weight observed option data points with the following scheme:
         """
     )
     st.latex(
