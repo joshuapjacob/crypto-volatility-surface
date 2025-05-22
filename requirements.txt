@@ -100,7 +100,7 @@ tenacity==9.0.0
     # via streamlit
 toml==0.10.2
     # via streamlit
-tornado==6.4.2
+tornado==6.5.1
     # via streamlit
 typing-extensions==4.12.2
     # via
