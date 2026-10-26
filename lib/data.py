@@ -1,7 +1,7 @@
 """Binance Option Data"""
 
 import os
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import polars as pl
 import requests
@@ -13,7 +13,7 @@ def get(path: str) -> dict:
 
     resp = requests.get(
         f"https://eapi.binance.com/eapi/v1/{path}",
-        proxies=dict(https=os.getenv("BINANCE_PROXY", "")),
+        proxies={"https": os.getenv("BINANCE_PROXY", "")},
     )
     resp.raise_for_status()
     resp = resp.json()
@@ -49,7 +49,7 @@ def load_data(now_ts: int, universe: list[str]) -> tuple[pl.DataFrame, datetime]
     # Get current exchange and symbol information.
     exchange_info = get("exchangeInfo")
     update_dt = datetime.fromtimestamp(
-        exchange_info["serverTime"] / 1000, tz=timezone.utc
+        exchange_info["serverTime"] / 1000, tz=UTC
     )
     symbol_df = (
         pl.DataFrame(
@@ -77,7 +77,7 @@ def load_data(now_ts: int, universe: list[str]) -> tuple[pl.DataFrame, datetime]
         .with_columns(
             indexPrice=pl.col("underlying").map_elements(
                 lambda x: float(get(f"index?underlying={x}")["indexPrice"]),
-                return_dtype=pl.Float32,
+                return_dtype=pl.Float64,
             )
         )
     )
@@ -107,8 +107,8 @@ def load_data(now_ts: int, universe: list[str]) -> tuple[pl.DataFrame, datetime]
         .filter(
             # Ignore deep in-the-money options.
             pl.when(pl.col("side") == "CALL")
-            .then((pl.col("logMoneyness") < MAX_LOG_MONEYNESS))
-            .otherwise((pl.col("logMoneyness") > -MAX_LOG_MONEYNESS))
+            .then(pl.col("logMoneyness") < MAX_LOG_MONEYNESS)
+            .otherwise(pl.col("logMoneyness") > -MAX_LOG_MONEYNESS)
         )
     )
 

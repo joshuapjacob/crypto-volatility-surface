@@ -1,6 +1,6 @@
 """Streamlit App"""
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import streamlit as st
 
@@ -72,8 +72,8 @@ with cols[0]:
 
 with cols[1]:
     # Load option data (with caching).
-    now_dt = datetime.now(tz=timezone.utc)
-    now_hr_ts = (now_dt.timestamp() // 3600) * 3600
+    now_dt = datetime.now(tz=UTC)
+    now_hr_ts = int(now_dt.timestamp() // 3600) * 3600
     df, update_dt = load_data(now_hr_ts, UNIVERSE)  # Cache hit if same hour.
     min_ago = int(max((now_dt - update_dt).total_seconds() // 60, 0))
     s = "" if min_ago == 1 else "s"
@@ -82,7 +82,7 @@ with cols[1]:
         Option market data was last updated {min_ago} minute{s} ago at
         {str(update_dt)[:16]} UTC."""
     )
-    st.dataframe(df, use_container_width=True)
+    st.dataframe(df, width="stretch")
 
 st.divider()  # ----------------------------------------------------------------
 
@@ -159,7 +159,7 @@ with st.spinner("Constructing kernel smoothed surface..."):
 cols = st.columns(len(figs), gap="large")
 for col, fig in zip(cols, figs):
     with col:
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
 st.divider()  # ----------------------------------------------------------------
 
@@ -224,7 +224,7 @@ with st.spinner("Constructing SVI surface..."):
 cols = st.columns(len(figs), gap="large")
 for col, fig in zip(cols, figs):
     with col:
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
 st.divider()  # ----------------------------------------------------------------
 

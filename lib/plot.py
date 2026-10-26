@@ -1,5 +1,7 @@
 """Volatility Surface Plots"""
 
+from collections.abc import Callable
+
 import numpy as np
 import plotly.graph_objs as go
 import polars as pl
@@ -8,7 +10,7 @@ N_POINTS = 25
 
 
 def generate_figures(
-    df: pl.DataFrame, surface_func: callable, *args
+    df: pl.DataFrame, surface_func: Callable, *args
 ) -> list[go.Figure]:
     """
     Generate volatility surface plots.
@@ -23,9 +25,10 @@ def generate_figures(
     """
 
     universe = df["underlying"].unique().sort()
-    max_tte = df.filter(pl.col("daysToExpiry") <= 180)["daysToExpiry"].max()
+    max_tte = df.filter(pl.col("daysToExpiry") <= 180)["daysToExpiry"].to_numpy().max()
+
     x = np.linspace(-1, 1, N_POINTS)
-    y = np.linspace(10, max_tte, N_POINTS)
+    y = np.linspace(10.0, max_tte, N_POINTS)
     X, Y = np.meshgrid(x, y)
     cmin, cmax = df["markIV"].min(), df["markIV"].max()
 
@@ -43,9 +46,9 @@ def generate_figures(
                 z=Z,
                 coloraxis="coloraxis",
                 opacity=0.9,
-                contours=dict(
-                    z=dict(highlight=False),
-                ),
+                contours={
+                    "z": {"highlight": False},
+                },
                 name="Surface",
                 showlegend=True,
                 hovertemplate=(
@@ -65,7 +68,7 @@ def generate_figures(
                     y=filtered["daysToExpiry"],
                     z=filtered["markIV"],
                     mode="markers",
-                    marker=dict(size=5, color=color),
+                    marker={"size": 5, "color": color},
                     name=side,
                     text=filtered["symbol"],
                     hovertemplate="<b>%{text}</b><br>IV: %{z}<extra></extra>",
@@ -75,33 +78,39 @@ def generate_figures(
 
         # Define layout.
         fig.update_layout(
-            title=dict(
-                text=underlying,
-                x=0.5,
-                y=0.95,
-                xanchor="center",
-                yanchor="top",
-            ),
+            title={
+                "text": underlying,
+                "x": 0.5,
+                "y": 0.95,
+                "xanchor": "center",
+                "yanchor": "top",
+            },
             height=600,
-            margin=dict(l=0, r=0, t=0, b=0),
-            coloraxis=dict(
-                cmin=cmin,
-                cmax=cmax,
-                colorbar=dict(tickformat=",.0%", title="IV", thickness=10),
-                colorscale="Viridis",
-            ),
-            legend=dict(y=0, itemsizing="constant"),
-            scene=dict(
-                xaxis=dict(title="Log Moneyness", range=[-1, 1], showspikes=False),
-                yaxis=dict(
-                    title="Days To Expiry", range=[10, max_tte], showspikes=False
-                ),
-                zaxis=dict(
-                    title="Implied Volatility",
-                    tickformat=",.0%",
-                    showspikes=False,
-                ),
-            ),
+            margin={"l": 0, "r": 0, "t": 0, "b": 0},
+            coloraxis={
+                "cmin": cmin,
+                "cmax": cmax,
+                "colorbar": {"tickformat": ",.0%", "title": "IV", "thickness": 10},
+                "colorscale": "Viridis",
+            },
+            legend={"y": 0, "itemsizing": "constant"},
+            scene={
+                "xaxis": {
+                    "title": "Log Moneyness",
+                    "range": [-1, 1],
+                    "showspikes": False,
+                },
+                "yaxis": {
+                    "title": "Days To Expiry",
+                    "range": [10, max_tte],
+                    "showspikes": False,
+                },
+                "zaxis": {
+                    "title": "Implied Volatility",
+                    "tickformat": ",.0%",
+                    "showspikes": False,
+                },
+            },
         )
 
         return fig
